@@ -1,0 +1,321 @@
+SQL> CREATE TABLE CUSTOMER_DETAILS
+  2  {
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT PK1 PRIMARY KEY (CID)
+  7  }
+  8  ;
+{
+*
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE CUSTOMER_DETAILS
+  2  {
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT PK1 PRIMARY KEY (CID)
+  7* };
+SQL> /
+{
+*
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE CUSTOMER_DETAILS
+  2  {
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT PK1 PRIMARY KEY (CID)
+  7* }
+  8  /
+{
+*
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE CUSTOMER_DETAILS
+  2  {
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT PK1 PRIMARY KEY (CID)
+  7* }
+SQL> /
+{
+*
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE CUSTOMER_DETAILS
+  2  (
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT PK1 PRIMARY KEY (CID)
+  7* )
+SQL> /
+CONSTRAINT PK1 PRIMARY KEY (CID)
+           *
+ERROR at line 6:
+ORA-02264: name already used by an existing constraint 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE CUSTOMER_DETAILS
+  2  (
+  3  CID VARCHAR(10) NOT NULL,
+  4  CNAME VARCHAR(15) NOT NULL,
+  5  LOC VARCHAR(15),
+  6  CONSTRAINT CPK1 PRIMARY KEY (CID)
+  7* )
+SQL> /
+
+Table created.
+
+SQL> CREATE TABLE PRODUCT_DETAILS
+  2  (
+  3  PID VARCHAR(10) NOT NULL,
+  4  PNAME VARCHAR(15) NOT NULL,
+  5  PRICE NUMBER NOT NULL,
+  6  DISC VARCHAR(20),
+  7  CONSTRAINT PPK1 PRIMARY KEY(PID)
+  8  );
+
+Table created.
+
+SQL> CREATE TABLE ORDERS
+  2  (
+  3  OID VARCHAR(10) NOT NULL,
+  4  ONAME VARCHAR(15) NOT NULL,
+  5  DELIVERY_DATE DATE NOT NULL,
+  6  CONSTRAINT OPK1 PRIMARY KEY(OID)
+  7  );
+
+Table created.
+
+SQL> RENAME CUSTOMER_DETAILS TO CUSTOMER;
+
+Table renamed.
+
+SQL> RENAME PRODUCT_DETAILS TO PRODUCT;
+
+Table renamed.
+
+SQL> SELECT * FROM CUSTOMER;
+
+no rows selected
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD CONSTRAINT CFK1 FOREIGN KEY(PID)
+  3  REFERENCE PRODUCT(PID);
+REFERENCE PRODUCT(PID)
+*
+ERROR at line 3:
+ORA-00905: missing keyword 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  ALTER TABLE CUSTOMER
+  2* ADD CONSTRAINT CFK1 FOREIGN KEY(PID) REFERENCES PRODUCT (PID)
+  3  /
+ADD CONSTRAINT CFK1 FOREIGN KEY(PID) REFERENCES PRODUCT (PID)
+                                *
+ERROR at line 2:
+ORA-00904: "PID": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  ALTER TABLE CUSTOMER
+  2* ADD CONSTRAINT CFK1 FOREIGN KEY (PID)REFERENCES PRODUCT (PID)
+SQL> /
+ADD CONSTRAINT CFK1 FOREIGN KEY (PID)REFERENCES PRODUCT (PID)
+                                 *
+ERROR at line 2:
+ORA-00904: "PID": invalid identifier 
+
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD PID VARCHAR(10);
+
+Table altered.
+
+SQL> ATLER TABLE CUSTOMER
+SP2-0734: unknown command beginning "ATLER TABL..." - rest of line ignored.
+SQL> ALTER TABLE CUSTOMER
+  2  ADD CONSTRAINT CFK1 FOREIGN KEY (PID) REFERENCES PRODUCT (PID);
+
+Table altered.
+
+SQL> ALTER TABLE ORDER
+  2  ADD CID VARCHAR(10);
+ALTER TABLE ORDER
+            *
+ERROR at line 1:
+ORA-00903: invalid table name 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  ALTER TABLE ORDERS
+  2* ADD CID VARCHAR(10)
+SQL> /
+
+Table altered.
+
+SQL> ALTER TABLE ORDERS
+  2  ADD CONSTRAINT OFK1 FOREIGN KEY (CID)
+  3  /
+ADD CONSTRAINT OFK1 FOREIGN KEY (CID)
+                                    *
+ERROR at line 2:
+ORA-00905: missing keyword 
+
+
+SQL> ALTER TABLE ORDERS
+  2  DROP COLUMN CID;
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD OID VARCHAR(10);
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD CONSTRAINT CFK2 FOREIGN KEY (OID) REFERENCES ORDERS (OID);
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD CNO NUMBER(10);
+
+Table altered.
+
+SQL> ALTER TABLE ORDERS
+  2  ADD DATE_OF_ORDER DATE;
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  MODIFY CID NUMBER(4);
+
+Table altered.
+
+SQL> ALTER TABLE PRODUCT
+  2  MODIFY PID NUMBER(4);
+MODIFY PID NUMBER(4)
+       *
+ERROR at line 2:
+ORA-02267: column type incompatible with referenced column type 
+
+
+SQL> ALTER TABLE ORDERS
+  2  MODIFY OID NUMBER(4);
+MODIFY OID NUMBER(4)
+       *
+ERROR at line 2:
+ORA-02267: column type incompatible with referenced column type 
+
+
+SQL> ALTER TABLE CUSTOMER
+  2  MODIFY PID NUMBER(4);
+MODIFY PID NUMBER(4)
+       *
+ERROR at line 2:
+ORA-02267: column type incompatible with referenced column type 
+
+
+SQL> ALTER TABLE CUSTOMER
+  2  DROP CONSTRAINT CFK1;
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  DROP CONSTRAINT CFK2;
+
+Table altered.
+
+SQL> ALTER TABLE PRODUCT
+  2  MODIFY PID NUMBER(4);
+
+Table altered.
+
+SQL> ALTER TABLE ORDERS
+  2  MODIFY OID NUMBER(4);
+
+Table altered.
+
+SQL>  ALTER TABLE CUSTOMER
+  2  /
+ ALTER TABLE CUSTOMER
+                    *
+ERROR at line 1:
+ORA-02210: no options specified for ALTER TABLE 
+
+
+SQL>  ALTER TABLE CUSTOMER
+  2   ADD OID NUMBER(4);
+ ADD OID NUMBER(4)
+     *
+ERROR at line 2:
+ORA-01430: column being added already exists in table 
+
+
+SQL> ALTER TABLE CUSTOMER
+  2  DROP COLUMN OID;
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  DROP COLUMN PID;
+
+Table altered.
+
+SQL>  ALTER TABLE CUSTOMER
+  2   ADD OID NUMBER(4);
+
+Table altered.
+
+SQL>  ALTER TABLE CUSTOMER
+  2   ADD PID NUMBER(4);
+
+Table altered.
+
+SQL>  ALTER TABLE CUSTOMER
+  2   ADD CONSTRAINT CFK1 FOREIGN KEY (PID) REFERENCES PRODUCT (PID);
+
+Table altered.
+
+SQL> ALTER TABLE CUSTOMER
+  2  ADD CONSTRAINT CFK2 FOREIGN KEY (OID) REFERENCES ORDERS (OID);
+
+Table altered.
+
+SQL> SPOOL OFF
